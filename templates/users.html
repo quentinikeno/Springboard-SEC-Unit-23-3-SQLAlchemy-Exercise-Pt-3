@@ -18,36 +18,5 @@ content %}
 	{% endif %}
 </div>
 
-<div>
-	<form action="POST">
-		<div class="form-group">
-			<label for="first-name">First Name</label>
-			<input
-				type="text"
-				class="form-control"
-				name="first-name"
-				id="first-name"
-			/>
-		</div>
-		<div class="form-group">
-			<label for="last-name">Last Name</label>
-			<input
-				type="text"
-				class="form-control"
-				name="last-name"
-				id="last-name"
-			/>
-		</div>
-		<div class="form-group">
-			<label for="image-url">Profile Image URL</label>
-			<input
-				type="url"
-				class="form-control"
-				name="image-url"
-				id="image-url"
-			/>
-		</div>
-		<button type="submit" class="btn btn-primary">Create User</button>
-	</form>
-</div>
+<a href="/users/new" class="btn btn-primary">Create a new user.</a>
 {% endblock %}
