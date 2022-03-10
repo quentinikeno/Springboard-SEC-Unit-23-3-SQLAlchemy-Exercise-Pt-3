@@ -2,7 +2,7 @@
 content %}
 <h1>Edit User</h1>
 <div class="my-3">
-	<form action="/users/new" method="POST">
+	<form action="/users/{{user.id}}/edit" method="POST">
 		<div class="form-group">
 			<label for="first-name">First Name</label>
 			<input

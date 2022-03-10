@@ -1,6 +1,5 @@
 """Blogly application."""
 
-from email.mime import image
 from flask import Flask, request, render_template, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User
@@ -44,7 +43,7 @@ def create_user():
     db.session.add(new_user)
     db.session.commit()
     
-    return redirect(f'/{new_user.id}')
+    return redirect(f'/users/{new_user.id}')
 
 @app.route('/users/<int:user_id>')
 def show_user_detail(user_id):
@@ -57,3 +56,30 @@ def edit_user_detail(user_id):
     """Edit details about a single user."""
     user = User.query.get_or_404(user_id)
     return render_template('edit_user_form.html', user=user)
+
+@app.route('/users/<int:user_id>/edit', methods=['POST'])
+def update_user(user_id):
+    """Update user in database and redirect to users detail page."""
+    user = User.query.get_or_404(user_id)
+    
+    first_name = request.form['first-name']
+    last_name = request.form['last-name']
+    image_url = request.form['image-url'] or None
+    
+    user.first_name = first_name
+    user.last_name = last_name
+    user.image_url = image_url
+
+    db.session.add(user)
+    db.session.commit()
+    
+    return redirect(f'/users/{user.id}')
+
+@app.route('/users/<int:user_id>/delete', methods=['POST'])
+def delete_user(user_id):
+    """Delete user from database."""
+    User.query.filter_by(id=user_id).delete()
+    db.session.commit()
+    
+    return redirect('/')
+    
