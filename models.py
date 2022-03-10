@@ -23,3 +23,8 @@ class User(db.Model):
         """Representation of User Instance"""
         u = self
         return f"<User id={u.id} first_name={u.first_name} last_name={u.last_name} image_url={u.image_url}>"
+    
+    @property
+    def full_name(self):
+        """Show first and last names concatenated together."""
+        return f"{self.first_name} {self.last_name}"

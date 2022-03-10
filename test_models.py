@@ -19,4 +19,8 @@ class UserModelTestCase(TestCase):
         
     def tearDown(self):
         """Clean up any failed transactions."""
-        db.sessionl.rollback()
+        db.session.rollback()
+        
+    def test_full_name(self):
+        user = User(first_name = "Test", last_name = "User")
+        self.assertEqual(user.full_name, "Test User")
