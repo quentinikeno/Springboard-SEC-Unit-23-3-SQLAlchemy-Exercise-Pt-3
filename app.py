@@ -24,7 +24,7 @@ def index():
 @app.route('/users')
 def show_users():
     """Page showing all users."""
-    users = User.query.all()
+    users = User.query.order_by(User.last_name, User.first_name).all()
     return render_template('users.html', users=users)
 
 @app.route('/users/new')
@@ -78,7 +78,8 @@ def update_user(user_id):
 @app.route('/users/<int:user_id>/delete', methods=['POST'])
 def delete_user(user_id):
     """Delete user from database."""
-    User.query.filter_by(id=user_id).delete()
+    user = User.query.get_or_404(user_id)
+    db.session.delete(user)
     db.session.commit()
     
     return redirect('/')
