@@ -2,7 +2,7 @@
 content %}
 <h1 class="display-1">All Users</h1>
 <hr />
-<div>
+<div class="my-5">
 	{% if users %}
 	<ul>
 		{% for user in users %}
@@ -18,5 +18,5 @@ content %}
 	{% endif %}
 </div>
 
-<a href="/users/new" class="btn btn-primary">Create a new user.</a>
+<a href="/users/new" class="btn btn-primary">Create a new user!</a>
 {% endblock %}
