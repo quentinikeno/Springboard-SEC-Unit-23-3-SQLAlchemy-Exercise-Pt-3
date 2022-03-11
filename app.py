@@ -103,3 +103,9 @@ def handle_adding_new_post(user_id):
     db.session.commit()
     
     return redirect(f'/users/{user.id}')
+
+@app.route('/posts/<int:post_id>')
+def show_post(post_id):
+    """Show details for single post."""
+    post = Post.query.get_or_404(post_id)
+    return render_template('post_detail.html', post=post)

@@ -10,6 +10,7 @@ block content %}
 	</div>
 	<div class="col-12 col-sm-8">
 		<h1>{{user.full_name}}</h1>
+		<a href="/" class="btn btn-outline-info">Back to All Users</a>
 		<a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
 		<form action="/users/{{user.id}}/delete" method="post" class="d-inline">
 			<button class="btn btn-danger" type="submit">Delete</button>
@@ -19,7 +20,7 @@ block content %}
 			<h2>Posts</h2>
 			<ul>
 				{% for post in user.posts %}
-				<li><a href="">{{post.title}}</a></li>
+				<li><a href="/posts/{{post.id}}">{{post.title}}</a></li>
 				{% endfor %}
 			</ul>
 			{% endif %}
