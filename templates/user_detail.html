@@ -14,6 +14,19 @@ block content %}
 		<form action="/users/{{user.id}}/delete" method="post" class="d-inline">
 			<button class="btn btn-danger" type="submit">Delete</button>
 		</form>
+		<div class="my-3">
+			{% if user.posts %}
+			<h2>Posts</h2>
+			<ul>
+				{% for post in user.posts %}
+				<li><a href="">{{post.title}}</a></li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			<a href="/users/{{user.id}}/posts/new" class="btn btn-info"
+				>Add Post</a
+			>
+		</div>
 	</div>
 </div>
 

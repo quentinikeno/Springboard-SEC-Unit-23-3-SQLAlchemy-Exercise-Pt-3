@@ -84,3 +84,22 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<h1 class="display-1">All Users</h1>', html)
             self.assertNotIn('Test User', html)
+            
+    def test_new_post_form_route(self):
+        """Test the route to show form for new posts."""
+        with app.test_client() as client:
+            resp = client.get(f"/users/{self.user_id}/posts/new")
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'<h1>New Post for {self.user.full_name}</h1>', html)
+            
+    def test_adding_new_post(self):
+        """Test adding new post to database."""
+        with app.test_client() as client:    
+            data = {'title': 'Test Title', 'content': 'Test Content', 'user_id': self.user_id}
+            resp = client.post(f"/users/{self.user_id}/posts/new", data=data, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'<h1>{self.user.full_name}</h1>', html)
