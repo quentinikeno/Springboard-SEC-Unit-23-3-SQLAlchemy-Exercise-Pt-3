@@ -21,7 +21,6 @@ class UserViewsTestCase(TestCase):
     
     def setUp(self):
         """Add a test user."""
-        db.session.rollback()
         
         User.query.delete()
         
@@ -110,3 +109,32 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f'<h1>{self.user.full_name}</h1>', html)
             self.assertIn("Test Title 2", html)
+            
+    def test_edit_post_form(self):
+        """Test showing the form to edit a post."""
+        with app.test_client() as client:
+            resp = client.get(f"/posts/{self.post.id}/edit")
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'{self.post.title}', html)
+            
+    def test_updating_post(self):
+        """Test updating post in database."""
+        with app.test_client() as client:    
+            data = {'title': 'New and Improved Title', 'content': 'New and Improved Content', 'user_id': self.user_id}
+            resp = client.post(f"/posts/{self.post.id}/edit", data=data, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("New and Improved Title", html)
+            self.assertIn("New and Improved Content", html)
+            
+    def test_deleting_post(self):
+        """Test deleting a post."""
+        with app.test_client() as client:
+            resp = client.post(f"/posts/{self.post.id}/delete", follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'<h1>Test User</h1>', html)

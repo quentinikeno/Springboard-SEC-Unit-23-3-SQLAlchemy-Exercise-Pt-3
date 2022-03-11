@@ -18,7 +18,7 @@ class User(db.Model):
     image_url = db.Column(db.Text, nullable = False, 
                         default = "https://images.unsplash.com/photo-1533738363-b7f9aef128ce?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80")
     
-    posts = db.relationship('Post', cascade='all, delete, delete-orphan')
+    posts = db.relationship("Post", backref="users", cascade="all, delete-orphan")
     
     def __repr__(self):
         """Representation of User Instance"""
@@ -37,10 +37,8 @@ class Post(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     title = db.Column(db.String(40), nullable = False)
     content = db.Column(db.Text, nullable = False)
-    created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="cascade"))
-    
-    users = db.relationship('User')
+    created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="cascade"), nullable=False)
     
     def __repr__(self):
         """Representation of Post Instance"""
