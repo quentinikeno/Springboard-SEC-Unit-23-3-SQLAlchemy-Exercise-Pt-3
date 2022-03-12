@@ -23,23 +23,27 @@ class UserViewsTestCase(TestCase):
         """Add a test user."""
         
         User.query.delete()
+        Post.query.delete()
+        Tag.query.delete()
         
         user = User(first_name = "Test", last_name = "User")
         db.session.add(user)
         db.session.commit()
         
+        self.user_id = user.id
+        self.user = user
+        
         post = Post(title='Test Title', content='Test Content', user_id=user.id)
         db.session.add(post)
         db.session.commit()
+        
+        self.post = post
         
         tag = Tag(name="test_tag", posts_tags=[PostTag(post_id=post.id)])
         
         db.session.add(tag)
         db.session.commit()
         
-        self.user_id = user.id
-        self.user = user
-        self.post = post
         self.tag = tag
         
     def tearDown(self):
@@ -164,3 +168,22 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f'<h1>{self.tag.name}</h1>', html)
             self.assertIn(f'{self.post.title}', html)
+            
+    def test_new_tag_form(self):
+        """Test the route to the form to create a new tag."""
+        with app.test_client() as client:
+            resp = client.get(f'/tags/new')
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<button type="submit" class="btn btn-success mt-3">Add Tag</button>', html)
+            
+    def test_create_new_tag(self):
+        """Test adding a new tag database."""
+        with app.test_client() as client:    
+            data = {'name': 'Test Tag'}
+            resp = client.post("/tags/new", data=data, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<h1>Test Tag</h1>", html)
