@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User, Post
+from models import db, User, Post, Tag, PostTag
 
 # Use test database and don't clutter tests with SQL
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
@@ -30,6 +30,11 @@ class UserViewsTestCase(TestCase):
         
         post = Post(title='Test Title', content='Test Content', user_id=user.id)
         db.session.add(post)
+        db.session.commit()
+        
+        tag = Tag(name="test_tag", posts_tags=[PostTag(post_id=post.id)])
+        
+        db.session.add(tag)
         db.session.commit()
         
         self.user_id = user.id
@@ -138,3 +143,13 @@ class UserViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f'<h1>Test User</h1>', html)
+            
+    def test_list_tags(self):
+        """Test the route for all tags."""
+        with app.test_client() as client:
+            resp = client.get('/tags')
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn('<h1>Tags</h1>', html)
+            self.assertIn('test_tag', html)

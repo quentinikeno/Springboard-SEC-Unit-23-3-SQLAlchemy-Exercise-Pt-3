@@ -16,6 +16,7 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 db.create_all()
 
+#Users routes
 @app.route('/')
 def index():
     """Redirect to page listing all users."""
@@ -104,6 +105,7 @@ def handle_adding_new_post(user_id):
     
     return redirect(f'/users/{user.id}')
 
+#Posts routes
 @app.route('/posts/<int:post_id>')
 def show_post(post_id):
     """Show details for single post."""
@@ -139,3 +141,11 @@ def delete_post(post_id):
     db.session.commit()
     
     return redirect(f'/users/{user_id}')
+
+#Tags routes
+@app.route('/tags')
+def show_tags():
+    """Lists all tags, with links to the tag detail page."""
+    tags = Tag.query.all()
+    
+    return render_template('all_tags.html', tags=tags)
