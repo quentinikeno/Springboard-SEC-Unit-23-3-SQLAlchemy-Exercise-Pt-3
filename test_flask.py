@@ -40,6 +40,7 @@ class UserViewsTestCase(TestCase):
         self.user_id = user.id
         self.user = user
         self.post = post
+        self.tag = tag
         
     def tearDown(self):
         """Clean up any fouled transaction."""
@@ -153,3 +154,13 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn('<h1>Tags</h1>', html)
             self.assertIn('test_tag', html)
+            
+    def test_show_tag(self):
+        """Test the route showing tag details."""
+        with app.test_client() as client:
+            resp = client.get(f'/tags/{self.tag.id}')
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'<h1>{self.tag.name}</h1>', html)
+            self.assertIn(f'{self.post.title}', html)

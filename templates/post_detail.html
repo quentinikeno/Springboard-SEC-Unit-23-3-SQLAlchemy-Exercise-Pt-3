@@ -5,7 +5,7 @@ block content %}
 <span class="text-muted">{{post.created_at}}</span>
 <p class="my-3">{{post.content}}</p>
 <a href="/users/{{post.user_id}}" class="btn btn-outline-info"
-	>Back to {{post.users.full_name}}</a
+	>{{post.users.full_name}}'s posts</a
 >
 <a href="/posts/{{post.id}}/edit" class="btn btn-primary">Edit</a>
 <form action="/posts/{{post.id}}/delete" method="post" class="d-inline">

@@ -144,8 +144,17 @@ def delete_post(post_id):
 
 #Tags routes
 @app.route('/tags')
-def show_tags():
+def list_tags():
     """Lists all tags, with links to the tag detail page."""
     tags = Tag.query.all()
     
     return render_template('all_tags.html', tags=tags)
+
+@app.route('/tags/<int:tag_id>')
+def show_tag_detail(tag_id):
+    """Show detail about a tag. Have links to edit form and to delete."""
+    tag = Tag.query.get_or_404(tag_id)
+    posts = tag.posts
+    
+    return render_template('show_tag.html', tag=tag, posts=posts)
+    
