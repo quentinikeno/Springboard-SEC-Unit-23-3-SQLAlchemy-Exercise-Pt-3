@@ -1,4 +1,5 @@
 """Models for Blogly."""
+from unicodedata import name
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -32,6 +33,7 @@ class User(db.Model):
     
 class Post(db.Model):
     """Posts model"""
+    
     __tablename__ = 'posts'
     
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
@@ -44,3 +46,16 @@ class Post(db.Model):
         """Representation of Post Instance"""
         p = self
         return f"<Post id={p.id} title={p.title} created_at={p.created_at} user_id={p.user_id}>"
+    
+class Tag(db.Model):
+    """Tags model"""
+    
+    __tablename__ = 'tags'
+    
+    id = db.Column(db.Integer, primary_key = True, autoincrement = True)
+    name = db.Column(db.String(30), nullable = False, unique=True)
+    
+    def __repr__(self):
+        """Representation of Tag Instance"""
+        t = self
+        return f"<Tag id={t.id} name={t.name}>"
