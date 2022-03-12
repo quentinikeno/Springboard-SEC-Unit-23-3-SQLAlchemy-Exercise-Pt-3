@@ -45,7 +45,7 @@ class Post(db.Model):
     #Relationship to PostTag
     posts_tags = db.relationship("PostTag", backref="posts", cascade="all, delete-orphan")
     
-    #Through relationship to tags
+    #Through relationship to Tag
     tags = db.relationship("Tag", secondary="posts_tags", backref="posts")
     
     def __repr__(self):
