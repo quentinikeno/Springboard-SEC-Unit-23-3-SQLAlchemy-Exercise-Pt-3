@@ -11,8 +11,12 @@ content %}
 	{% endfor %}
 </ul>
 {% endif %}
-<a href="/tags/{{tag.id}}/edit" class="btn btn-primary">Edit Tag</a>
-<form action="/tags/{{tag.id}}/delete" method="post" class="d-inline">
-	<button class="btn btn-danger" type="submit">Delete Tag</button>
-</form>
+<div>
+	<a href="/tags" class="btn btn-outline-info">All Tags</a>
+	<a href="/tags/{{tag.id}}/edit" class="btn btn-primary">Edit Tag</a>
+	<form action="/tags/{{tag.id}}/delete" method="post" class="d-inline">
+		<button class="btn btn-danger" type="submit">Delete Tag</button>
+	</form>
+</div>
+
 {% endblock %}
