@@ -74,8 +74,8 @@ class PostTag(db.Model):
     
     __tablename__ = 'posts_tags'
     
-    post_id = db.Column(db.Integer, db.ForeignKey("post.id", ondelete="cascade"), primary_key=True)
-    tag_id = db.Column(db.Integer, db.ForeignKey("tag.id", ondelete="cascade"), primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey("posts.id", ondelete="cascade"), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey("tags.id", ondelete="cascade"), primary_key=True)
     
     def __repr__(self):
         """Representation of PostTag Instance"""
