@@ -42,6 +42,12 @@ class Post(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp(), nullable = False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="cascade"), nullable=False)
     
+    #Relationship to PostTag
+    posts_tags = db.relationship("PostTag", backref="posts", cascade="all, delete-orphan")
+    
+    #Through relationship to tags
+    tags = db.relationship("Tag", secondary="posts_tags", backref="posts")
+    
     def __repr__(self):
         """Representation of Post Instance"""
         p = self
@@ -55,7 +61,23 @@ class Tag(db.Model):
     id = db.Column(db.Integer, primary_key = True, autoincrement = True)
     name = db.Column(db.String(30), nullable = False, unique=True)
     
+    #Relationship to PostTag
+    posts_tags = db.relationship("PostTag", backref="tags", cascade="all, delete-orphan")
+    
     def __repr__(self):
         """Representation of Tag Instance"""
         t = self
         return f"<Tag id={t.id} name={t.name}>"
+    
+class PostTag(db.Model):
+    """Mapping of a posts to tags."""
+    
+    __tablename__ = 'posts_tags'
+    
+    post_id = db.Column(db.Integer, db.ForeignKey("post.id", ondelete="cascade"), primary_key=True)
+    tag_id = db.Column(db.Integer, db.ForeignKey("tag.id", ondelete="cascade"), primary_key=True)
+    
+    def __repr__(self):
+        """Representation of PostTag Instance"""
+        pt = self
+        return f"<PostTag post_id={pt.post_id} tag_id={pt.tag_id}>"
