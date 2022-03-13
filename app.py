@@ -1,5 +1,6 @@
 """Blogly application."""
 
+from tabnanny import check
 from flask import Flask, request, render_template, redirect
 from flask_debugtoolbar import DebugToolbarExtension
 from models import db, connect_db, User, Post, Tag, PostTag
@@ -89,7 +90,8 @@ def delete_user(user_id):
 def new_post_form(user_id):
     """Show form to add a new post."""
     user = User.query.get_or_404(user_id)
-    return render_template('new_post_form.html', user=user)
+    all_tags = Tag.query.all()
+    return render_template('new_post_form.html', user=user, tags=all_tags)
 
 @app.route('/users/<int:user_id>/posts/new', methods=['POST'])
 def handle_adding_new_post(user_id):
@@ -98,8 +100,10 @@ def handle_adding_new_post(user_id):
     
     title = request.form['title']
     content = request.form['content']
+    checkbox_tags_list = request.form.getlist('tags-checkbox')
+    posts_tags_list = [PostTag(tag_id=tag_id) for tag_id in checkbox_tags_list]
     
-    new_post = Post(title=title, content=content, user_id=user_id)
+    new_post = Post(title=title, content=content, user_id=user_id, posts_tags=posts_tags_list)
     db.session.add(new_post)
     db.session.commit()
     
@@ -117,7 +121,10 @@ def show_post(post_id):
 def show_edit_post_form(post_id):
     """Show form to edit post."""
     post = Post.query.get_or_404(post_id)
-    return render_template('edit_post.html', post=post)
+    all_tags = Tag.query.all()
+    this_posts_tags = post.tags
+    
+    return render_template('edit_post.html', post=post, tags=all_tags, this_posts_tags=this_posts_tags)
 
 @app.route('/posts/<int:post_id>/edit', methods=['POST'])
 def update_post(post_id):
@@ -126,6 +133,10 @@ def update_post(post_id):
     
     post.title = request.form['title']
     post.content = request.form['content']
+    
+    checkbox_tags_list = request.form.getlist('tags-checkbox')
+    checked_tags_list =  Tag.query.filter(Tag.id.in_(checkbox_tags_list)).all()
+    post.tags = checked_tags_list
     
     db.session.add(post)
     db.session.commit()

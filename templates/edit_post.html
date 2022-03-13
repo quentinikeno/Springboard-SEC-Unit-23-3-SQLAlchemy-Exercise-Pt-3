@@ -26,10 +26,36 @@ content %}
 {{post.content}}</textarea
 			>
 		</div>
+		{% if tags %} {% for tag in tags %}
+		<div class="form-check form-group mt-2">
+			<input
+				class="form-check-input"
+				type="checkbox"
+				name="tags-checkbox"
+				id="checkbox_{{tag.id}}"
+				value="{{tag.id}}"
+				{%
+				if
+				tag
+				in
+				this_posts_tags
+				%}
+				checked
+				{%
+				endif
+				%}
+			/>
+			<label class="form-check-label" for="checkbox_{{tag.id}}"
+				>{{tag.name}}</label
+			>
+		</div>
+		{% endfor %} {% endif %}
 		<a href="/posts/{{post.id}}" class="btn btn-outline-info mt-3"
 			>Cancel</a
 		>
-		<button type="submit" class="btn btn-success mt-3">Edit Post</button>
+		<button type="submit" class="btn btn-success mt-3">
+			Save Edits to Post
+		</button>
 	</form>
 </div>
 {% endblock %}
