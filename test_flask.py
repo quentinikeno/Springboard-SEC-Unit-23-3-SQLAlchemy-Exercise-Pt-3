@@ -172,7 +172,7 @@ class UserViewsTestCase(TestCase):
     def test_new_tag_form(self):
         """Test the route to the form to create a new tag."""
         with app.test_client() as client:
-            resp = client.get(f'/tags/new')
+            resp = client.get('/tags/new')
             html = resp.get_data(as_text=True)
             
             self.assertEqual(resp.status_code, 200)
@@ -187,3 +187,13 @@ class UserViewsTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("<h1>Test Tag</h1>", html)
+            
+    def test_edit_tag_form(self):
+        """Test the route to the form to edit a tag."""
+        with app.test_client() as client:
+            resp = client.get(f'/tags/{self.tag.id}/edit')
+            html = resp.get_data(as_text=True)
+            
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn(f'{self.tag.name}', html)
+            self.assertIn('<button type="submit" class="btn btn-success mt-3">Edit Tag</button>', html)

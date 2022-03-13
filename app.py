@@ -173,3 +173,22 @@ def  create_new_tag():
     db.session.commit()
     
     return redirect(f'/tags/{new_tag.id}')
+
+@app.route('/tags/<int:tag_id>/edit')
+def edit_tag_form(tag_id):
+    """Form to edit tag"""
+    tag = Tag.query.get_or_404(tag_id)
+    
+    return render_template('edit_tag_form.html', tag=tag)
+
+@app.route('/tags/<int:tag_id>/edit', methods=['POST'])
+def edit_tag_form(tag_id):
+    """Form to edit tag"""
+    tag = Tag.query.get_or_404(tag_id)
+    
+    tag.name = request.form['name']
+    
+    db.session.add(tag)
+    db.session.commit()
+    
+    return redirect(f'/tags/{tag.id}')
