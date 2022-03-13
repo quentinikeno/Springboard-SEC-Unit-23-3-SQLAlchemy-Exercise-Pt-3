@@ -110,7 +110,8 @@ def handle_adding_new_post(user_id):
 def show_post(post_id):
     """Show details for single post."""
     post = Post.query.get_or_404(post_id)
-    return render_template('post_detail.html', post=post)
+    tags = post.tags
+    return render_template('post_detail.html', post=post, tags=tags)
 
 @app.route('/posts/<int:post_id>/edit')
 def show_edit_post_form(post_id):

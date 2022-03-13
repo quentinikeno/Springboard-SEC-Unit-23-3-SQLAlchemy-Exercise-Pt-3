@@ -1,14 +1,30 @@
 {% extends 'base.html' %} {% block title %} {{post.title}} {% endblock %} {%
 block content %}
-<h1>{{post.title}}</h1>
-<hr />
-<span class="text-muted">{{post.created_at}}</span>
-<p class="my-3">{{post.content}}</p>
-<a href="/users/{{post.user_id}}" class="btn btn-outline-info"
-	>{{post.users.full_name}}'s posts</a
->
-<a href="/posts/{{post.id}}/edit" class="btn btn-primary">Edit</a>
-<form action="/posts/{{post.id}}/delete" method="post" class="d-inline">
-	<button class="btn btn-danger" type="submit">Delete</button>
-</form>
+<div>
+	<h1>{{post.title}}</h1>
+	<hr />
+	<span class="text-muted">{{post.created_at}}</span>
+</div>
+{% if tags %}
+<div>
+	<p>
+		Tags: {% for tag in tags %}
+		<span class="badge rounded-pill bg-info text-dark">{{tag.name}}</span>
+		{% endfor %}
+	</p>
+</div>
+{% endif %}
+
+<div><p class="my-3">{{post.content}}</p></div>
+
+<div>
+	<a href="/users/{{post.user_id}}" class="btn btn-outline-info"
+		>{{post.users.full_name}}'s posts</a
+	>
+	<a href="/posts/{{post.id}}/edit" class="btn btn-primary">Edit</a>
+	<form action="/posts/{{post.id}}/delete" method="post" class="d-inline">
+		<button class="btn btn-danger" type="submit">Delete</button>
+	</form>
+</div>
+
 {% endblock %}
