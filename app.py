@@ -182,7 +182,7 @@ def edit_tag_form(tag_id):
     return render_template('edit_tag_form.html', tag=tag)
 
 @app.route('/tags/<int:tag_id>/edit', methods=['POST'])
-def edit_tag_form(tag_id):
+def update_tag(tag_id):
     """Form to edit tag"""
     tag = Tag.query.get_or_404(tag_id)
     
@@ -192,3 +192,13 @@ def edit_tag_form(tag_id):
     db.session.commit()
     
     return redirect(f'/tags/{tag.id}')
+
+@app.route('/tags/<int:tag_id>/delete', methods=['POST'])
+def delete_tag(tag_id):
+    """Form to edit tag"""
+    tag = Tag.query.get_or_404(tag_id)
+    
+    db.session.delete(tag)
+    db.session.commit()
+    
+    return redirect(f'/tags')

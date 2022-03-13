@@ -197,3 +197,23 @@ class UserViewsTestCase(TestCase):
             self.assertEqual(resp.status_code, 200)
             self.assertIn(f'{self.tag.name}', html)
             self.assertIn('<button type="submit" class="btn btn-success mt-3">Edit Tag</button>', html)
+            
+    def test_update_tag(self):
+        """Test editing tag in database."""
+        with app.test_client() as client:    
+            data = {'name': 'edit tag'}
+            resp = client.post(f"/tags/{self.tag.id}/edit", data=data, follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<h1>edit tag</h1>", html)
+            
+    def test_delete_tag(self):
+        """Test deleting tag in database."""
+        with app.test_client() as client:    
+            resp = client.post(f"/tags/{self.tag.id}/delete",  follow_redirects=True)
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<h1>Tags</h1>", html)
+            self.assertNotIn(f'{self.tag.name}', html)
